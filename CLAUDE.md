@@ -57,12 +57,11 @@ The skill is built around context economy: load the minimum upfront, pull detail
   `notebook-and-report.md` (Stages 7 & 9), `subagents.md` (optional scout + data-quality +
   critic delegation). Adding depth → put it in a reference and link from `SKILL.md`.
 - **`assets/report-template.html`** — the Stage 9 deliverable template: a **prose-driven
-  data essay** (blog × paper hybrid), not a dashboard of cards. Self-contained, a **neutral
-  default design theme**, **bilingual ko/en** (`.i18n` + `data-ko`/`data-en`, `applyLang` swaps
+  data essay** (blog × paper hybrid), not a dashboard of cards. Self-contained, Sciencemj
+  design system, **bilingual ko/en** (`.i18n` + `data-ko`/`data-en`, `applyLang` swaps
   `innerHTML`), theme + language toggles, essay primitives (`.essay`, `figure.figure`,
   `.midcol`, `.pull`, `.aside`, `.srccards`). `TODO` placeholders the user-facing run fills
-  in — including the portfolio back-link, repo link, and footer, which are **personalized to the
-  running user or removed (never ship another author's identity)**.
+  in. Carries a `← 포트폴리오` back-link and an `embed/footer.js` `<script>` that must survive copies.
 - **`scripts/data_quality.py`** — the Stage 4 profiler (report mode) and the Stage 6
   data-prep gate (`--strict`): per-column null-rate, outliers (IQR + robust-z), duplicates,
   constant/all-null columns; exits nonzero on violation.
@@ -121,11 +120,9 @@ external eval harness (skill-creator), not run from here.
   `references/` file with a one-line pointer from `SKILL.md`.
 - **Preserve the gate structure.** Every stage ends with `→ gate:`. Don't soften gates into
   suggestions — they are the skill's main contribution.
-- **The template stays self-contained, bilingual, prose-first, and identity-neutral.** Don't split
-  `report-template.html` into external CSS/JS; keep the theme + language toggles. The portfolio
-  back-link, repo link, and footer are **personalized to the running user or removed — never ship
-  the author's URLs / shared footer** (the bundled footer is self-contained; the design tokens are
-  a neutral default, restyle via CSS vars). Every translatable node carries
+- **The template stays self-contained, bilingual, prose-first.** Don't split
+  `report-template.html` into external CSS/JS; keep the footer `<script>`, the theme +
+  language toggles, and the `← 포트폴리오` link intact. Every translatable node carries
   `.i18n` + both `data-ko`/`data-en` (keep parity). Prose is the backbone — cards/figures
   are accents; don't regress it into a card dashboard.
 - When you change a stage's behavior, update the matching `evals/evals.json` assertion so the
