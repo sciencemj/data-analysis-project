@@ -55,8 +55,8 @@ It is faithful to CRISP-DM's **intent**: Business Understanding and Evaluation a
 
 ### Install
 ```bash
-# Register the marketplace, then install (repo URL or local path)
-/plugin marketplace add <your-repo-url-or-local-path>
+# Register the marketplace, then install
+/plugin marketplace add sciencemj/data-analysis-project
 /plugin install data-analysis-project
 ```
 

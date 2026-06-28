@@ -55,8 +55,8 @@ CRISP-DM 의 **정신에 충실**합니다: 비즈니스 이해와 평가가 핵
 
 ### 설치
 ```bash
-# 마켓플레이스 등록 후 설치 (repo URL 또는 로컬 경로)
-/plugin marketplace add <your-repo-url-or-local-path>
+# 마켓플레이스 등록 후 설치
+/plugin marketplace add sciencemj/data-analysis-project
 /plugin install data-analysis-project
 ```
 
