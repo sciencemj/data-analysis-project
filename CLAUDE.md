@@ -10,6 +10,10 @@ plus its bundled references, assets, and helper scripts. Editing this repo means
 instructions a future Claude instance reads when it runs a data-analysis project. Optimize for
 what the *reading* Claude will do, not for runtime behavior of a program.
 
+It is an **opinionated implementation of CRISP-DM** — the nine gated stages map onto CRISP-DM's
+six phases (Business Understanding → 1–2, Data Understanding → 3–4, Data Preparation → 6,
+Modeling → 5 + 7, Evaluation → 8, Deployment → 9). The README documents this mapping.
+
 **Repo layout (plugin):**
 
 ```
@@ -19,6 +23,8 @@ agents/                             # plugin subagents: data-source-scout, data-
 skills/data-analysis-project/       # the skill payload — paths below are relative to here
   SKILL.md  references/  scripts/  assets/
 evals/                              # dev-only: behavioral test cases + fixtures (not shipped)
+README.md / README.ko.md            # bilingual docs (EN default + ko language button), CRISP-DM framing
+LICENSE                             # MIT
 CLAUDE.md                          # this file (repo dev guidance, not shipped)
 ```
 
@@ -42,8 +48,9 @@ The skill is built around context economy: load the minimum upfront, pull detail
 - **`SKILL.md`** — the always-loaded entry point. Frontmatter `description` is the trigger
   (verbose on purpose, bilingual KO/EN, lists trigger phrases). Body holds the **9-stage
   workflow** with a **`→ gate`** after each stage. The gates are the core idea: each stage
-  must be verified real before the next begins. Keep `SKILL.md` lean — it points to the
-  references rather than inlining their detail.
+  must be verified real before the next begins. The run tracks progress with a **per-stage
+  Claude TODO** (in-progress on entry, completed only when the gate passes). Keep `SKILL.md`
+  lean — it points to the references rather than inlining their detail.
 - **`references/*.md`** — loaded only when the relevant stage is reached. One file per
   concern: `stage-playbook.md` (per-stage tactics + templates, incl. Stage 4 profiling &
   Stage 6 data-prep checklists), `data-sourcing.md` (Stage 3 access details),
