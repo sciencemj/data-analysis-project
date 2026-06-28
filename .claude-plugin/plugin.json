@@ -1,0 +1,12 @@
+{
+  "name": "data-analysis-project",
+  "version": "1.0.0",
+  "description": "End-to-end gated data-analysis workflow — frame a real problem, set a measurable goal, source real data, build a verified notebook, ship a bilingual (ko/en) prose-driven HTML data essay.",
+  "author": {
+    "name": "sciencemj",
+    "email": "sciencemj.park@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": ["data-analysis", "eda", "notebook", "report", "data-essay", "korean", "bilingual", "workflow"],
+  "skills": ["./skills/data-analysis-project"]
+}

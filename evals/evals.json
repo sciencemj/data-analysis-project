@@ -1,0 +1,96 @@
+{
+  "skill_name": "data-analysis-project",
+  "evals": [
+    {
+      "id": 0,
+      "name": "cafe-sales-full-arc",
+      "prompt": "우리 카페 24개월치 월별 매출 데이터야 (cafe_sales.csv). 요즘 매출이 정체된 것 같은데 왜 그런지 분석해서 분석 노트북이랑 결과 리포트까지 만들어줘.",
+      "expected_output": "Full workflow: frames/verifies the plateau problem, sets a measurable goal, plans method, builds a Jupyter notebook (one action per cell, markdown interpretation between cells), and writes a self-contained HTML report with a limitations section. Ideally surfaces the reframe that revenue is propped up by promo-driven new customers while repeat customers decline.",
+      "files": ["files/cafe_sales.csv"],
+      "assertions": [
+        {"text": "Produces a Jupyter notebook (.ipynb) file"},
+        {"text": "Produces a self-contained HTML report file"},
+        {"text": "Notebook interleaves markdown cells that interpret results (not just code)"},
+        {"text": "Report contains an explicit limitations / 보완할 점 section"},
+        {"text": "Output shows a stated, measurable analysis goal before diving into code"},
+        {"text": "Conclusions cite specific numbers from the data"},
+        {"text": "Surfaces that repeat customers are declining despite flat/rising revenue (reframe)"},
+        {"text": "Profiles the data — per-column null-rate, distributions, and an outlier/duplicate check — as a distinct step before modeling"},
+        {"text": "Confirms or prepares a validated modeling table (handles or explicitly clears missing values, outliers, and duplicates) before building the notebook"},
+        {"text": "States an explicit verdict on whether the stated success criterion was met (achieved value vs the target), not only a qualitative conclusion"},
+        {"text": "Maintains a stage-by-stage todo/progress list (one item per stage, updated as gates pass), not an unstructured one-shot dump"}
+      ]
+    },
+    {
+      "id": 1,
+      "name": "open-data-sourcing-subway",
+      "prompt": "서울 지하철 역별·시간대별 승하차 공공데이터로 출퇴근 시간 혼잡도 분석 프로젝트를 하고 싶어. 데이터 찾는 것부터 분석, 리포트까지 진행해줘.",
+      "expected_output": "Frames the congestion problem with evidence, sets a measurable goal, identifies a real open dataset and investigates its actual access method (portal, API/CSV, schema, encoding), plans method, and outlines the notebook + report. Should probe/verify the data source rather than assume field names.",
+      "files": [],
+      "assertions": [
+        {"text": "Identifies a concrete real open dataset and its access method (portal/API/CSV)"},
+        {"text": "Investigates actual schema/fields/access rather than assuming them"},
+        {"text": "States a measurable analysis goal tied to a decision"},
+        {"text": "Plans methods that fit the data characteristics (time-of-day, station granularity)"},
+        {"text": "Plan includes producing a notebook and an HTML report with limitations"},
+        {"text": "Surfaces feasibility constraints early during problem framing (data availability, license/privacy, key risks, and effort-vs-decision-stakes) before committing to a source"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "ambiguous-goal-forces-framing",
+      "prompt": "이 데이터 좀 분석해줘 (cafe_sales.csv).",
+      "expected_output": "Because the goal is vague, the workflow should not dive straight into generic EDA — it should frame the problem and pin down a concrete, measurable goal (ideally via brainstorming with the user) before substantial analysis, then proceed.",
+      "files": ["files/cafe_sales.csv"],
+      "assertions": [
+        {"text": "Does NOT immediately dump generic EDA without framing a problem/goal"},
+        {"text": "Explicitly works to define a concrete, measurable goal first"},
+        {"text": "Asks the user or proposes specific candidate questions to narrow scope"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "messy-data-strict-prep",
+      "prompt": "이 카페 매출 데이터로 매출 추세 분석해줘 (cafe_sales_messy.csv). 결측치랑 이상해 보이는 값이 좀 있는 것 같아.",
+      "expected_output": "The data has injected quality issues: missing values (repeat_customers, avg_ticket, promo_spend), outliers (a ~8x revenue spike and a ~10x avg_ticket), a negative customer count (impossible value), and a duplicate month row. The workflow should PROFILE the data (Stage 4) — surfacing the null-rates, outliers, the duplicate, and the impossible negative — then PREPARE & VALIDATE the table (Stage 6) with explicit, reasoned treatment of each issue (impute/drop/cap/keep-as-signal, dedup, fix/flag the negative) plus a logged before/after, before any modeling. Treatment choices should be justified against the data shape and goal, not applied blindly.",
+      "files": ["files/cafe_sales_messy.csv"],
+      "assertions": [
+        {"text": "Profiles the data and reports per-column null-rate / distributions before modeling"},
+        {"text": "Detects the missing values and handles them with a stated treatment (impute or drop) and a reason, not silently"},
+        {"text": "Detects the outliers (revenue spike, avg_ticket spike) and decides cap / drop / keep-as-signal with justification"},
+        {"text": "Detects and resolves the duplicate month row"},
+        {"text": "Flags the impossible negative customer count as a range/validity violation"},
+        {"text": "Logs the before/after of cleaning (every drop/impute documented) and validates the prepared table before building the notebook"},
+        {"text": "Does not blindly delete all flagged rows or mean-impute without considering the series/seasonality"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "unreachable-goal-go-no-go",
+      "prompt": "카페 월매출을 MAPE 2% 이내로 예측하는 모델 만들어줘 (cafe_sales.csv).",
+      "expected_output": "The requested threshold (MAPE ≤ 2% on 24 noisy monthly points) is effectively unreachable. The workflow should set the quantitative target, build/backtest a model, report the achieved metric numerically, compare it to the 2% threshold, and declare an explicit NOT MET / shortfall verdict — without faking success. On the shortfall it should surface the go/no-go choice to the user (loop back to refine method/data or reframe, vs publish an honest 'goal not met + why + next step' report), not silently ship a success report.",
+      "files": ["files/cafe_sales.csv"],
+      "assertions": [
+        {"text": "Sets a quantitative success target at Stage 2 (absolute or baseline-relative), not just a vague aim"},
+        {"text": "Backtests/validates a model and reports the achieved metric (e.g. MAPE) as a concrete number"},
+        {"text": "Compares the achieved metric to the stated threshold and declares an explicit NOT MET / shortfall verdict"},
+        {"text": "Does NOT claim success when the threshold is unmet (no false success)"},
+        {"text": "Surfaces the go/no-go choice — loop back to refine/reframe vs publish an honest 'goal not met' report — rather than silently shipping a success report"},
+        {"text": "Compares a baseline against at least one candidate model and selects by the named metric, not a single un-compared run"}
+      ]
+    },
+    {
+      "id": 5,
+      "name": "descriptive-clustering-no-forced-model",
+      "prompt": "cafe_sales.csv의 달들을 매출·고객 패턴으로 K-means 군집화해서 비슷한 시기를 묶어줘.",
+      "expected_output": "A descriptive/unsupervised endpoint (clustering), so the predictive modeling-execution loop is N/A. The workflow should still frame the goal, profile the data (Stage 4), and prepare it, but for the method it must NOT force a baseline-vs-candidate predictive model comparison or a backtest-and-tune loop. Instead it should choose k with a method-appropriate rationale (silhouette / elbow), consider scaling, validate the clusters, and the report keeps the 방법 chapter with a validity view rather than a model-comparison / MAPE table.",
+      "files": ["files/cafe_sales.csv"],
+      "assertions": [
+        {"text": "Profiles the data before clustering (distributions and the need to scale features of different magnitudes)"},
+        {"text": "Does NOT force a baseline-vs-candidate predictive model comparison or a backtest-and-tune / MAPE-style loop"},
+        {"text": "Selects k with a method-appropriate rationale (silhouette / elbow) and validates the clusters appropriately"},
+        {"text": "Reports clustering with a method-appropriate validity view, not a predictive model-comparison table"}
+      ]
+    }
+  ]
+}

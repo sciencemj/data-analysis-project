@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "data-analysis-project",
+  "owner": {
+    "name": "sciencemj"
+  },
+  "plugins": [
+    {
+      "name": "data-analysis-project",
+      "source": "./",
+      "description": "End-to-end gated data-analysis workflow — frame a real problem, set a measurable goal, source real data, build a verified notebook, ship a bilingual (ko/en) prose-driven HTML data essay.",
+      "version": "1.0.0",
+      "author": {
+        "name": "sciencemj",
+        "email": "sciencemj.park@gmail.com"
+      },
+      "license": "MIT",
+      "keywords": ["data-analysis", "eda", "notebook", "report", "data-essay", "korean", "bilingual", "workflow"],
+      "category": "data-science"
+    }
+  ]
+}

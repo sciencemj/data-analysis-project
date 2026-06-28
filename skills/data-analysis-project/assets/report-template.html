@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<!--
+  Sciencemj — data-essay report template (prose-driven, blog × paper hybrid)
+  =========================================================================
+  Reads like a long-form data essay: flowing prose (줄글) is the backbone that
+  carries the argument; cards, figures, graphs, pull-quotes and callouts are
+  VISUAL ACCENTS inserted between prose blocks — never the main content. Avoid
+  the "dashboard of cards with one-line captions" look.
+
+  How to use
+    1. Copy this file into the project repo as `report.html`.
+    2. Title = the project's core question (e.g. "범죄 적은 동네가 더 비쌀까?").
+    3. Search "TODO" and replace every one. Fill BOTH data-ko and data-en on
+       each `.i18n` element; the visible text = the data-ko version.
+    4. Drop figures into report_assets/ and fix every <img src>.
+    5. Delete the numbered chapters / blocks you don't need; keep the arc
+       question → data → backdrop → core test → caution → reframe → method
+       → conclusion → limitations.
+    6. Verify parity: count of .i18n == count of data-ko == count of data-en,
+       and zero remaining "TODO". Then run scripts/screenshot_report.py.
+
+  Hard requirements (do not remove)
+    • Bilingual: every translatable node is class="i18n" with data-ko + data-en.
+    • Keep the theme toggle (ddr-theme), the language toggle (ddr-lang), and the
+      footer.js <script> include intact.
+    • Keep the "← 포트폴리오 / Portfolio" back-link; set TODO-repo to this project.
+
+  Layout primitives (CSS below)
+    All flow blocks share one content width (max-width:1080px) so prose, figures,
+    cards and the title line up on the same left/right edge as you scroll:
+    .essay (prose column) · figure.figure[.wide] (img in .frame) · .midcol[.wide]
+    (center tables/bars/cards) · .pull (pull-quote) · .aside .box (방법 노트 / method
+    note) · .srccards (3-up data-source cards) · reuse .callout · .insights/.ins ·
+    .bars · .card · table · .refbox.
+    Use only the design-system CSS variables — do not invent new colors/spacing.
+-->
+<html lang="ko" data-theme="light" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TODO: 핵심 질문을 제목으로 — scope</title>
+<meta name="description" content="TODO: one-line summary of the report (the bottom line).">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+/* ===== Design tokens — Sciencemj (warm earth-tone, terracotta) ===== */
+:root{
+  --accent-50:#FDF1E8;--accent-100:#FBDFC8;--accent-200:#F6BE91;--accent-300:#F19C5C;
+  --accent-400:#ED7E33;--accent:#E8682B;--accent-600:#CE551E;--accent-700:#A84417;--accent-soft:#FBEEE2;
+  --canvas:#FAF6F0;--surface:#FFFFFF;--surface-2:#F3ECE0;
+  --ink:#221C16;--ink-2:#4A4036;--muted:#6E614D;--border:#E8DECE;--border-2:#D8CBB5;
+  --viz-orange:#E8682B;--viz-clay:#C2613F;--viz-sand:#D9A441;--viz-olive:#7E8A4B;
+  --viz-teal:#4E8A7E;--viz-slate:#5E6E8A;--viz-mauve:#B0746A;--viz-brown:#6B4B33;
+  --success:#5E8A52;--warning:#D9A441;--danger:#C5503B;--info:#4E8A7E;
+  --r-xs:6px;--r-sm:10px;--r-md:14px;--r-lg:20px;--r-xl:28px;--r-pill:999px;
+  --shadow-sm:0 1px 2px rgba(60,42,24,.06),0 1px 1px rgba(60,42,24,.04);
+  --shadow-md:0 4px 14px rgba(60,42,24,.08),0 2px 4px rgba(60,42,24,.05);
+  --shadow-lg:0 14px 34px rgba(60,42,24,.12),0 4px 10px rgba(60,42,24,.07);
+  --shadow-raised:inset 0 1px 0 rgba(255,255,255,.7),0 6px 16px rgba(60,42,24,.10);
+  --shadow-accent:0 10px 26px rgba(232,104,43,.30);
+  --font-display:"Space Grotesk","IBM Plex Sans KR",system-ui,sans-serif;
+  --font-body:"Hanken Grotesk","IBM Plex Sans KR",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+[data-theme="dark"]{
+  --accent:#F2783A;--accent-600:#E8682B;--accent-700:#F19C5C;--accent-soft:#2E2017;
+  --canvas:#1B1611;--surface:#251E18;--surface-2:#2F271F;
+  --ink:#F3EBDD;--ink-2:#C9BCA8;--muted:#998A75;--border:#392F26;--border-2:#4A3E31;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.40);--shadow-md:0 4px 14px rgba(0,0,0,.45);
+  --shadow-lg:0 14px 34px rgba(0,0,0,.55);--shadow-raised:inset 0 1px 0 rgba(255,255,255,.06),0 6px 16px rgba(0,0,0,.5);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-body);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;transition:background .3s,color .3s}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.14;letter-spacing:-.015em;margin:0;text-wrap:balance}
+p{text-wrap:pretty;margin:0}
+a{color:var(--accent);text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--canvas) 82%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:62px}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:700;font-size:17px;letter-spacing:-.02em;color:var(--ink);min-width:0}
+.brand .mk{width:26px;height:26px;border-radius:8px;background:var(--accent);display:grid;place-items:center;color:#fff;box-shadow:var(--shadow-accent)}
+.brand .mk svg{width:15px;height:15px}
+.brand .dot{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:var(--r-md);border:1px solid var(--border-2);background:var(--surface);color:var(--muted);cursor:pointer;box-shadow:var(--shadow-sm);transition:transform .2s,color .15s}
+.icon-btn:hover{color:var(--ink);transform:translateY(-1px)}
+.icon-btn svg{width:18px;height:18px}
+.lang-toggle{display:inline-flex;align-items:stretch;border:1px solid var(--border-2);border-radius:var(--r-pill);overflow:hidden;background:var(--surface);box-shadow:var(--shadow-sm)}
+.lang-toggle button{appearance:none;border:0;background:transparent;cursor:pointer;font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--muted);padding:7px 13px;line-height:1;white-space:nowrap;transition:background .15s,color .15s}
+.lang-toggle button.on{background:var(--accent);color:#fff}
+.lang-toggle button:not(.on):hover{color:var(--ink)}
+
+/* eyebrow */
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:500}
+.eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(232,104,43,.5);animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(232,104,43,.5)}70%{box-shadow:0 0 0 8px rgba(232,104,43,0)}100%{box-shadow:0 0 0 0 rgba(232,104,43,0)}}
+
+/* hero */
+.hero{position:relative;padding:74px 0 40px;overflow:hidden}
+.glow{position:absolute;top:-140px;left:50%;transform:translateX(-50%);width:760px;height:420px;background:radial-gradient(ellipse at center,rgba(232,104,43,.18),rgba(232,104,43,0) 68%);pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center}
+.hero-grid>div{min-width:0}
+h1.title{font-family:var(--font-display);font-weight:700;font-size:46px;line-height:1.06;letter-spacing:-.025em;margin:18px 0 0}
+h1.title em{font-style:normal;color:var(--accent)}
+.lead{margin:20px 0 0;font-size:17px;line-height:1.6;color:var(--ink-2);max-width:480px}
+.byline{margin-top:22px;font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 16px}
+.byline b{color:var(--ink-2);font-weight:500}
+.hero-meta{display:flex;gap:30px;margin-top:26px;flex-wrap:wrap}
+.hero-meta .v{font-family:var(--font-mono);font-size:24px;font-weight:600}
+.hero-meta .v small{font-size:14px;color:var(--muted)}
+.hero-meta .k{font-size:12px;color:var(--muted);margin-top:2px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-raised);padding:20px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.panel-title{font-size:13px;font-weight:600;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+.panel-title .dotg{width:8px;height:8px;border-radius:50%;background:var(--success)}
+.big-num{font-family:var(--font-mono);font-size:30px;font-weight:600;margin:6px 0 0;letter-spacing:-.01em}
+.big-num .u{font-size:14px;color:var(--muted)}
+.delta{font-family:var(--font-mono);font-size:12px;color:var(--danger)}
+.panel img{width:100%;display:block;border-radius:var(--r-md);margin-top:8px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.stat{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px 12px}
+.stat .v{font-family:var(--font-mono);font-size:16px;font-weight:600}
+.stat .k{font-size:11px;color:var(--muted);margin-top:1px}
+
+/* badges / shared blocks */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:var(--r-pill);font-family:var(--font-mono);font-size:11px;font-weight:500;background:var(--accent-soft);color:var(--accent-700)}
+section.block{padding:46px 0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-md);padding:24px}
+.card.raised{box-shadow:var(--shadow-raised)}
+.card h3{font-size:18px;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+.card h3 .ic{width:30px;height:30px;border-radius:9px;background:var(--accent-soft);color:var(--accent-700);display:grid;place-items:center;flex:none}
+.card h3 .ic svg{width:16px;height:16px}
+.card p{color:var(--ink-2);font-size:14.5px}
+.cap{color:var(--muted);font-size:13px;margin-top:12px;line-height:1.55}
+.cap b{color:var(--ink);font-weight:600}
+.bars{display:flex;flex-direction:column;gap:11px;margin-top:6px}
+.bar-row{display:grid;grid-template-columns:130px 1fr 60px;align-items:center;gap:12px}
+.bar-row .lab{font-size:13px;color:var(--ink-2);overflow-wrap:anywhere}
+.bar-track{height:12px;background:var(--surface-2);border-radius:var(--r-pill);overflow:hidden}
+.bar-fill{height:100%;border-radius:var(--r-pill);background:var(--accent)}
+.bar-row .pct{font-family:var(--font-mono);font-size:12.5px;color:var(--ink);text-align:right}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--border);overflow-wrap:anywhere}
+th{font-family:var(--font-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.num,th.num{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+tbody tr:hover{background:var(--surface-2)}
+.insights{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ins{display:flex;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:18px 20px}
+.ins .n{font-family:var(--font-mono);font-weight:600;color:var(--accent);font-size:14px;flex:none;width:30px;height:30px;border-radius:9px;background:var(--accent-soft);display:grid;place-items:center}
+.ins h4{font-size:15.5px;margin-bottom:4px}
+.ins p{font-size:13.5px;color:var(--ink-2)}
+.callout{background:var(--accent-soft);border:1px solid var(--accent-200);border-left:4px solid var(--accent);border-radius:var(--r-md);padding:20px 22px}
+.callout h3{font-size:17px;color:var(--accent-700);margin-bottom:6px}
+.callout p{font-size:14.5px;color:var(--ink-2)}
+.refbox{display:grid;grid-template-columns:1fr 1fr;gap:30px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px 28px}
+.ref-h{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 13px}
+.ref-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.ref-list li{position:relative;padding-left:16px;font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.ref-list li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--accent-300)}
+.ref-list li b{color:var(--ink);font-weight:600;font-family:var(--font-mono);font-size:12px;letter-spacing:.02em;margin-right:6px}
+.ref-list a{color:var(--accent);font-weight:500}
+
+/* ===== long-form essay (줄글 중심) — the backbone ===== */
+.longform{padding:24px 0 8px}
+.essay{max-width:1080px;margin:0 auto;padding:0 28px}
+.essay+.essay{margin-top:0}
+.kicker{display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:40px 0 16px}
+.kicker .no{display:inline-grid;place-items:center;min-width:26px;height:22px;padding:0 7px;border-radius:var(--r-pill);background:var(--accent-soft);color:var(--accent-700);font-size:11px}
+.kicker .ln{flex:1;height:1px;background:var(--border-2)}
+.essay h2{font-size:31px;letter-spacing:-.022em;line-height:1.13;margin:0 0 22px}
+.essay h3{font-size:19px;margin:34px 0 10px}
+.essay p{font-size:17.5px;line-height:1.86;color:var(--ink-2);margin:0 0 22px}
+.essay p b,.essay p strong{color:var(--ink);font-weight:600}
+.essay p.lede{font-size:20.5px;line-height:1.66;color:var(--ink)}
+.essay p.lede::first-letter{font-family:var(--font-display);font-weight:700;font-size:1em;color:var(--accent)}
+.midcol{max-width:1080px;margin:30px auto;padding:0 28px}
+.midcol.wide{max-width:1080px}
+/* figures as breakout visual accents (wider than the prose column) */
+figure.figure{margin:38px auto;max-width:1080px;padding:0 28px}
+figure.figure.wide{max-width:1080px}
+figure.figure .frame{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-md);padding:16px;overflow:hidden}
+figure.figure img{width:100%;display:block;border-radius:var(--r-md)}
+figure.figure figcaption{margin:13px 4px 0;font-size:13.5px;line-height:1.62;color:var(--muted)}
+figure.figure figcaption .ft{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-right:9px}
+figure.figure figcaption b{color:var(--ink);font-weight:600}
+/* pull quote — one-line takeaway of a section */
+.pull{max-width:1080px;margin:36px auto;padding:4px 28px}
+.pull blockquote{margin:0;padding:6px 0 6px 24px;border-left:4px solid var(--accent);font-family:var(--font-display);font-weight:600;font-size:24px;line-height:1.34;letter-spacing:-.01em;color:var(--ink)}
+/* aside / method note */
+.aside{max-width:1080px;margin:30px auto;padding:0 28px}
+.aside .box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);padding:20px 24px}
+.aside .at{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.aside .at svg{width:14px;height:14px}
+.aside .box p{font-size:14.5px;line-height:1.72;color:var(--ink-2);margin:0}
+.aside .box p+p{margin-top:10px}
+/* inline data-source mini cards */
+.srccards{max-width:1080px;margin:26px auto;padding:0 28px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.srccards .card{padding:20px}
+.srccards .card h3{font-size:16px}
+@media(max-width:860px){.hero-grid,.grid-2,.insights,.refbox{grid-template-columns:1fr}.srccards{grid-template-columns:1fr}h1.title{font-size:36px}}
+@media(max-width:560px){.nav-in{gap:8px}.nav-right{gap:8px}.brand{font-size:15px}.lang-toggle button{padding:6px 10px}.essay h2{font-size:26px}.essay p{font-size:16.5px}.essay p.lede{font-size:18.5px}.pull blockquote{font-size:20px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <!-- TODO: project short name -->
+    <div class="brand"><span class="mk"><i data-lucide="bar-chart-3"></i></span><span><span class="i18n" data-ko="TODO 짧은 제목" data-en="TODO short title">TODO 짧은 제목</span><span class="dot">.</span></span></div>
+    <div class="nav-right">
+      <a href="https://sciencemj.github.io/" class="badge" aria-label="포트폴리오 / Portfolio"><span class="i18n" data-ko="← 포트폴리오" data-en="← Portfolio">← 포트폴리오</span></a>
+      <!-- TODO: link to THIS project's GitHub repo -->
+      <a href="https://github.com/sciencemj/TODO-repo" class="icon-btn" target="_blank" rel="noopener" aria-label="GitHub 소스 / View source"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a>
+      <div class="lang-toggle" role="group" aria-label="Language / 언어">
+        <button type="button" data-set-lang="ko">한국어</button>
+        <button type="button" data-set-lang="en">EN</button>
+      </div>
+      <button class="icon-btn" id="theme" aria-label="테마 전환 / Toggle theme"><i data-lucide="moon"></i></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO + SIDE PANEL ============ -->
+<header class="hero">
+  <div class="glow"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="pulse"></span>&nbsp;<span class="i18n" data-ko="데이터 에세이 · TODO scope · TODO period" data-en="Data essay · TODO scope · TODO period">데이터 에세이 · TODO scope · TODO period</span></span>
+      <h1 class="title i18n" data-ko="TODO 핵심 질문을<br><em>한 줄로</em>" data-en="TODO the core question<br><em>in one line</em>">TODO 핵심 질문을<br><em>한 줄로</em></h1>
+      <p class="lead i18n" data-ko="TODO: 2–3문장으로 결론(bottom line)을 먼저 말한다 — 무엇을 검증했고, 데이터가 무엇을 보여줬는지. <b>핵심 결론</b>은 굵게." data-en="TODO: state the bottom line in 2–3 sentences — what you tested and what the data showed. <b>Key conclusion</b> in bold.">TODO: 2–3문장으로 결론(bottom line)을 먼저 말한다 — 무엇을 검증했고, 데이터가 무엇을 보여줬는지. <b>핵심 결론</b>은 굵게.</p>
+      <div class="byline i18n" data-ko="<b>분석 단위</b> TODO&nbsp;&nbsp;·&nbsp;&nbsp;<b>성격</b> TODO (연관/인과)&nbsp;&nbsp;·&nbsp;&nbsp;<b>읽는 시간</b> 약 0분" data-en="<b>Unit</b> TODO&nbsp;&nbsp;·&nbsp;&nbsp;<b>Nature</b> TODO (assoc./causal)&nbsp;&nbsp;·&nbsp;&nbsp;<b>Read</b> ~0 min"><b>분석 단위</b> TODO&nbsp;&nbsp;·&nbsp;&nbsp;<b>성격</b> TODO (연관/인과)&nbsp;&nbsp;·&nbsp;&nbsp;<b>읽는 시간</b> 약 0분</div>
+      <div class="hero-meta tnum">
+        <div class="m"><div class="v">000<small> <span class="i18n" data-ko="단위" data-en="unit">단위</span></small></div><div class="k i18n" data-ko="TODO 지표" data-en="TODO metric">TODO 지표</div></div>
+        <div class="m"><div class="v">000<small>%</small></div><div class="k i18n" data-ko="TODO 지표" data-en="TODO metric">TODO 지표</div></div>
+        <div class="m"><div class="v">0.0<small>×</small></div><div class="k i18n" data-ko="TODO 지표" data-en="TODO metric">TODO 지표</div></div>
+      </div>
+    </div>
+    <!-- side panel: the single most striking figure + headline number -->
+    <div class="panel">
+      <div class="panel-head"><span class="panel-title"><span class="dotg"></span><span class="i18n" data-ko="TODO 대표 차트" data-en="TODO primary chart">TODO 대표 차트</span></span><span class="badge i18n" data-ko="TODO 범위" data-en="TODO range">TODO 범위</span></div>
+      <div class="big-num tnum">000 <span class="delta i18n" data-ko="▼ TODO 한 줄 요약" data-en="▼ TODO one-line">▼ TODO 한 줄 요약</span></div>
+      <!-- TODO: drop the hero figure into report_assets/ -->
+      <img src="report_assets/fig_hero.png" alt="TODO: describe the hero chart">
+      <div class="stat-row tnum">
+        <div class="stat"><div class="v">000</div><div class="k i18n" data-ko="TODO" data-en="TODO">TODO</div></div>
+        <div class="stat"><div class="v i18n" data-ko="TODO" data-en="TODO">TODO</div><div class="k i18n" data-ko="TODO" data-en="TODO">TODO</div></div>
+        <div class="stat"><div class="v i18n" data-ko="TODO" data-en="TODO">TODO</div><div class="k i18n" data-ko="TODO" data-en="TODO">TODO</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ 01 질문 — essay: lede + prose ============ -->
+<section class="longform"><div class="essay">
+  <div class="kicker"><span class="no">01</span><span class="i18n" data-ko="질문" data-en="The question">질문</span><span class="ln"></span></div>
+  <h2 class="i18n" data-ko="TODO: 출발점이 된 통념/가설" data-en="TODO: the belief or hunch we start from">TODO: 출발점이 된 통념/가설</h2>
+  <p class="lede i18n" data-ko="TODO: 독자를 끌어들이는 첫 문단. 왜 이 질문이 흥미로운지, 어떤 통념을 검증하려는지를 줄글로." data-en="TODO: an opening paragraph that draws the reader in — why this question is interesting, which belief we set out to test.">TODO: 독자를 끌어들이는 첫 문단. 왜 이 질문이 흥미로운지, 어떤 통념을 검증하려는지를 줄글로.</p>
+  <p class="i18n" data-ko="TODO: 질문을 구체화한다 — 분석 단위, 기간, 무엇을 측정하는지. 그리고 미리 못 박을 전제(예: <b>상관이지 인과가 아니다</b>)를 한 문단으로." data-en="TODO: make the question concrete — unit of analysis, period, what is measured. Then nail down a premise up front (e.g. <b>association, not causation</b>) in one paragraph.">TODO: 질문을 구체화한다 — 분석 단위, 기간, 무엇을 측정하는지. 그리고 미리 못 박을 전제(예: <b>상관이지 인과가 아니다</b>)를 한 문단으로.</p>
+</div></section>
+
+<!-- ============ 02 데이터 — essay prose, then 3-up source cards, then prose ============ -->
+<section class="longform"><div class="essay">
+  <div class="kicker"><span class="no">02</span><span class="i18n" data-ko="데이터" data-en="The data">데이터</span><span class="ln"></span></div>
+  <h2 class="i18n" data-ko="TODO: 어떤 데이터로 답하나" data-en="TODO: what data answers it">TODO: 어떤 데이터로 답하나</h2>
+  <p class="i18n" data-ko="TODO: 데이터의 출처·결합 방식을 줄글로 설명. 어떤 키로 병합했고 최종 패널/테이블이 어떤 모양인지." data-en="TODO: in prose, the sources and how they were combined — the join key, and the shape of the final panel/table.">TODO: 데이터의 출처·결합 방식을 줄글로 설명. 어떤 키로 병합했고 최종 패널/테이블이 어떤 모양인지.</p>
+</div>
+  <div class="srccards">
+    <div class="card">
+      <h3><span class="ic"><i data-lucide="database"></i></span><span class="i18n" data-ko="TODO 출처 A" data-en="TODO source A">TODO 출처 A</span></h3>
+      <p style="margin-bottom:8px"><span class="badge i18n" data-ko="TODO 형식/ID" data-en="TODO format/ID">TODO 형식/ID</span></p>
+      <p class="i18n" data-ko="TODO: 무엇을 담고, 어떤 단위/기간이며, 어떻게 검증했는지." data-en="TODO: what it holds, its grain/period, how it was validated.">TODO: 무엇을 담고, 어떤 단위/기간이며, 어떻게 검증했는지.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ic"><i data-lucide="map-pin"></i></span><span class="i18n" data-ko="TODO 출처 B" data-en="TODO source B">TODO 출처 B</span></h3>
+      <p style="margin-bottom:8px"><span class="badge i18n" data-ko="TODO 형식/ID" data-en="TODO format/ID">TODO 형식/ID</span></p>
+      <p class="i18n" data-ko="TODO: 무엇을 담고, 어떤 단위/기간이며, 어떻게 검증했는지." data-en="TODO: what it holds, its grain/period, how it was validated.">TODO: 무엇을 담고, 어떤 단위/기간이며, 어떻게 검증했는지.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ic"><i data-lucide="users"></i></span><span class="i18n" data-ko="TODO 출처 C" data-en="TODO source C">TODO 출처 C</span></h3>
+      <p style="margin-bottom:8px"><span class="badge i18n" data-ko="TODO 형식/ID" data-en="TODO format/ID">TODO 형식/ID</span></p>
+      <p class="i18n" data-ko="TODO: 무엇을 담고, 어떤 단위/기간이며, 알아둘 약점(예: 분모)." data-en="TODO: what it holds, its grain/period, a caveat to flag (e.g. the denominator).">TODO: 무엇을 담고, 어떤 단위/기간이며, 알아둘 약점(예: 분모).</p>
+    </div>
+  </div>
+<div class="essay">
+  <p class="i18n" data-ko="TODO: 데이터의 신뢰성/약한 고리를 줄글로 짚는다. 나중에 결론을 흔들 수 있는 선택이 있으면 여기서 예고한다." data-en="TODO: in prose, note the data's reliability and any weak link. If a choice could shake the conclusion later, foreshadow it here.">TODO: 데이터의 신뢰성/약한 고리를 줄글로 짚는다. 나중에 결론을 흔들 수 있는 선택이 있으면 여기서 예고한다.</p>
+</div></section>
+
+<!-- ============ 03 배경 — essay, then a figure pair ============ -->
+<section class="longform"><div class="essay">
+  <div class="kicker"><span class="no">03</span><span class="i18n" data-ko="배경" data-en="Backdrop">배경</span><span class="ln"></span></div>
+  <h2 class="i18n" data-ko="TODO: 본론 전에 본 무대" data-en="TODO: the stage before the core">TODO: 본론 전에 본 무대</h2>
+  <p class="i18n" data-ko="TODO: 추세/구성 등 배경 사실을 줄글로. 그림을 참조할 땐 본문에서 (그림 1)처럼 가리킨다. 시간축 동행을 인과로 읽지 말라는 주의도 여기서." data-en="TODO: backdrop facts (trends, composition) in prose. Reference figures inline like (Fig. 1). Warn here against reading co-movement on the time axis as causation.">TODO: 추세/구성 등 배경 사실을 줄글로. 그림을 참조할 땐 본문에서 (그림 1)처럼 가리킨다. 시간축 동행을 인과로 읽지 말라는 주의도 여기서.</p>
+</div>
+  <figure class="figure">
+    <div class="frame"><img src="report_assets/fig_trend.png" alt="TODO: describe figure 1"></div>
+    <figcaption><span class="ft i18n" data-ko="그림 1" data-en="Fig. 1">그림 1</span><span class="i18n" data-ko="TODO: <b>이 그림이 보여주는 한 가지</b>와 그것이 왜 중요한지 — 무엇인지가 아니라 무엇을 말하는지." data-en="TODO: <b>the one thing this figure shows</b> and why it matters — what it says, not just what it is."><b>TODO</b> 캡션 — 무엇을 말하는지.</span></figcaption>
+  </figure>
+  <figure class="figure">
+    <div class="frame"><img src="report_assets/fig_dist.png" alt="TODO: describe figure 2"></div>
+    <figcaption><span class="ft i18n" data-ko="그림 2" data-en="Fig. 2">그림 2</span><span class="i18n" data-ko="TODO: 두 번째 그림의 해석적 캡션." data-en="TODO: an interpretive caption for the second figure."><b>TODO</b> 두 번째 그림 캡션.</span></figcaption>
+  </figure>
+</section>
+
+<!-- ============ 04 핵심 검증 — essay, breakout figure, pull-quote ============ -->
+<section class="longform"><div class="essay">
+  <div class="kicker"><span class="no">04</span><span class="i18n" data-ko="핵심 검증" data-en="The core test">핵심 검증</span><span class="ln"></span></div>
+  <h2 class="i18n" data-ko="TODO: 통념을 정면으로 검증" data-en="TODO: testing the belief head-on">TODO: 통념을 정면으로 검증</h2>
+  <p class="i18n" data-ko="TODO: 핵심 검증을 줄글로 끌고 간다 — 통념이 옳다면 무엇이 보여야 하는지, 실제로는 무엇이 보였는지를 구체적 숫자와 함께." data-en="TODO: carry the core test in prose — what should appear if the belief held, and what actually appeared, with specific numbers.">TODO: 핵심 검증을 줄글로 끌고 간다 — 통념이 옳다면 무엇이 보여야 하는지, 실제로는 무엇이 보였는지를 구체적 숫자와 함께.</p>
+</div>
+  <figure class="figure">
+    <div class="frame"><img src="report_assets/fig_core.png" alt="TODO: describe the core figure"></div>
+    <figcaption><span class="ft i18n" data-ko="그림 3" data-en="Fig. 3">그림 3</span><span class="i18n" data-ko="TODO: <b>핵심 결과</b>를 한 문장으로 — 방향·세기·유의성." data-en="TODO: the <b>core result</b> in one sentence — direction, strength, significance."><b>TODO</b> 핵심 결과 캡션.</span></figcaption>
+  </figure>
+  <div class="pull"><blockquote class="i18n" data-ko="“TODO: 이 장의 한 줄 핵심 — 인용구로 뽑아낼 만한 결정적 문장.”" data-en="“TODO: the one-line takeaway of this section — a sentence worth pulling out.”">“TODO: 이 장의 한 줄 핵심 — 인용구로 뽑아낼 만한 결정적 문장.”</blockquote></div>
+</section>
+
+<!-- ============ 05 해석 주의 — essay + a centered callout ============ -->
+<section class="longform"><div class="essay">
+  <div class="kicker"><span class="no">05</span><span class="i18n" data-ko="해석 주의" data-en="A caution">해석 주의</span><span class="ln"></span></div>
+  <h2 class="i18n" data-ko="TODO: 성급한 결론을 경계" data-en="TODO: guarding against a hasty read">TODO: 성급한 결론을 경계</h2>
+  <p class="i18n" data-ko="TODO: 결과를 어떻게 읽으면 안 되는지를 줄글로 (예: ‘관계 없음’과 ‘검출 불가’는 다르다, 검정력, 신뢰구간 폭)." data-en="TODO: in prose, how the result must NOT be read (e.g. ‘no relationship’ ≠ ‘cannot detect’, power, CI width).">TODO: 결과를 어떻게 읽으면 안 되는지를 줄글로 (예: ‘관계 없음’과 ‘검출 불가’는 다르다, 검정력, 신뢰구간 폭).</p>
+</div>
+  <div class="midcol">
+    <div class="callout">
+      <h3 class="i18n" data-ko="⚠ TODO: 해석 주의 제목" data-en="⚠ TODO: caution title">⚠ TODO: 해석 주의 제목</h3>
+      <p class="i18n" data-ko="TODO: 한 문단으로 핵심 주의 — 무엇을 뜻하고 무엇을 뜻하지 않는지." data-en="TODO: the key caution in one paragraph — what it means and what it does not.">TODO: 한 문단으로 핵심 주의 — 무엇을 뜻하고 무엇을 뜻하지 않는지.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 재프레임 — essay + a chart card (.bars) + method note + pull ============ -->
+<section class="longform"><div class="essay">
+  <div class="kicker"><span class="no">06</span><span class="i18n" data-ko="재프레임" data-en="The reframe">재프레임</span><span class="ln"></span></div>
+  <h2 class="i18n" data-ko="TODO: 진짜 이야기는 다르다" data-en="TODO: the real story is different">TODO: 진짜 이야기는 다르다</h2>
+  <p class="i18n" data-ko="TODO: 데이터가 가리키는 ‘진짜 문제’를 줄글로. 가정을 바꾸거나 왜곡 요인을 걷어내면 그림이 어떻게 달라지는지 숫자로." data-en="TODO: in prose, the ‘real problem’ the data points to. How the picture changes once you fix an assumption or strip a distortion — with numbers.">TODO: 데이터가 가리키는 ‘진짜 문제’를 줄글로. 가정을 바꾸거나 왜곡 요인을 걷어내면 그림이 어떻게 달라지는지 숫자로.</p>
+</div>
+  <div class="midcol">
+    <div class="card">
+      <h3 style="font-size:16px"><span class="ic"><i data-lucide="bar-chart-3"></i></span><span class="i18n" data-ko="TODO: 막대 차트 제목" data-en="TODO: bar chart title">TODO: 막대 차트 제목</span></h3>
+      <figcaption style="font-family:var(--font-mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:2px 0 14px"><span class="i18n" data-ko="그림 4" data-en="Fig. 4">그림 4</span></figcaption>
+      <div class="bars">
+        <div class="bar-row"><span class="lab i18n" data-ko="TODO 항목" data-en="TODO item">TODO 항목</span><div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--viz-slate)"></div></div><span class="pct">0.00</span></div>
+        <div class="bar-row"><span class="lab i18n" data-ko="TODO 항목" data-en="TODO item">TODO 항목</span><div class="bar-track"><div class="bar-fill" style="width:83%;background:var(--accent)"></div></div><span class="pct">0.00</span></div>
+        <div class="bar-row"><span class="lab i18n" data-ko="TODO 항목" data-en="TODO item">TODO 항목</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--accent-700)"></div></div><span class="pct">0.00</span></div>
+      </div>
+      <p class="cap" style="margin-top:14px"><span class="i18n" data-ko="TODO: <b>이 막대가 말하는 것</b> — 변화의 크기와 방향." data-en="TODO: <b>what these bars say</b> — the size and direction of the shift."><b>TODO</b> 막대 캡션.</span></p>
+    </div>
+  </div>
+  <div class="aside">
+    <div class="box">
+      <div class="at"><i data-lucide="flask-conical"></i><span class="i18n" data-ko="방법 노트" data-en="Method note">방법 노트</span></div>
+      <p class="i18n" data-ko="TODO: 방법론적 단서/주의(공선성, 표본, 보정 등)를 한두 문단으로. 본문 흐름을 끊지 않는 곁가지." data-en="TODO: a methodological caveat (collinearity, sample, adjustment) in one or two paragraphs — a side note that doesn't break the main flow.">TODO: 방법론적 단서/주의(공선성, 표본, 보정 등)를 한두 문단으로. 본문 흐름을 끊지 않는 곁가지.</p>
+    </div>
+  </div>
+  <div class="pull"><blockquote class="i18n" data-ko="“TODO: 재프레임의 한 줄 — 처음 본 결과가 왜 착시였는지.”" data-en="“TODO: the reframe in one line — why the first result was an illusion.”">“TODO: 재프레임의 한 줄 — 처음 본 결과가 왜 착시였는지.”</blockquote></div>
+</section>
+
+<!-- ============ 07 방법 — essay + a comparison table at reading width ============ -->
+<section class="longform"><div class="essay">
+  <div class="kicker"><span class="no">07</span><span class="i18n" data-ko="방법" data-en="The lens">방법</span><span class="ln"></span></div>
+  <h2 class="i18n" data-ko="TODO: 왜 이 방법이 맞는 렌즈인가" data-en="TODO: why this is the right lens">TODO: 왜 이 방법이 맞는 렌즈인가</h2>
+  <p class="i18n" data-ko="TODO: 방법 선택의 근거를 줄글로 — 데이터의 성질에 비춰 왜 이 모델/설계가 맞고 흔한 본능이 왜 틀리는지. 베이스라인을 무엇이 이겨야 했는지." data-en="TODO: in prose, the reasoning behind the method — why this model/design fits the data and why the common instinct misleads. What the baseline a model had to beat was.">TODO: 방법 선택의 근거를 줄글로 — 데이터의 성질에 비춰 왜 이 모델/설계가 맞고 흔한 본능이 왜 틀리는지. 베이스라인을 무엇이 이겨야 했는지.</p>
+</div>
+  <div class="midcol">
+    <!-- Predictive projects: baseline vs candidates; the metric column = the named Stage-5 metric (MAPE/RMSE/AUC/…).
+         Descriptive/unsupervised (clustering/EDA/correlation/effect-estimation): KEEP this 방법 chapter but swap this
+         table for a method-appropriate validity table (e.g. silhouette by k, or correlation r + CI). Do NOT delete ch.07. -->
+    <table class="tnum">
+      <thead><tr><th class="i18n" data-ko="모델" data-en="Model">모델</th><th class="i18n" data-ko="역할" data-en="Role">역할</th><th class="num i18n" data-ko="TODO 지표 (예: MAPE)" data-en="TODO metric (e.g. MAPE)">TODO 지표 (예: MAPE)</th></tr></thead>
+      <tbody>
+        <tr><td class="i18n" data-ko="TODO 베이스라인" data-en="TODO baseline">TODO 베이스라인</td><td class="i18n" data-ko="baseline" data-en="baseline">baseline</td><td class="num">0.00</td></tr>
+        <tr><td class="i18n" data-ko="TODO 주모델" data-en="TODO main model">TODO 주모델</td><td class="i18n" data-ko="★ 결정관련" data-en="★ decision-relevant">★ 결정관련</td><td class="num">0.00</td></tr>
+        <tr><td class="i18n" data-ko="TODO 점검모델" data-en="TODO check model">TODO 점검모델</td><td class="i18n" data-ko="강건성 / 대안 점검" data-en="robustness / alt check">강건성 / 대안 점검</td><td class="num">0.00</td></tr>
+      </tbody>
+    </table>
+  </div>
+<div class="essay">
+  <p class="i18n" data-ko="TODO: 강건성/방향성(역인과) 점검 결과를 줄글로 — 무엇을 빼도 결론이 흔들리지 않았는지, 인과를 말할 수 없는 이유가 데이터로도 확인되는지." data-en="TODO: in prose, robustness and directional (reverse-causation) checks — what you could drop without moving the conclusion, and whether ‘not causal’ holds up in the data.">TODO: 강건성/방향성(역인과) 점검 결과를 줄글로 — 무엇을 빼도 결론이 흔들리지 않았는지, 인과를 말할 수 없는 이유가 데이터로도 확인되는지.</p>
+</div></section>
+
+<!-- ============ 08 결론 — PROSE FIRST (lede + p), THEN insight cards ============ -->
+<section class="longform"><div class="essay">
+  <div class="kicker"><span class="no">08</span><span class="i18n" data-ko="결론" data-en="Conclusion">결론</span><span class="ln"></span></div>
+  <h2 class="i18n" data-ko="TODO: 그래서 무엇을 의미하나" data-en="TODO: what it means">TODO: 그래서 무엇을 의미하나</h2>
+  <p class="lede i18n" data-ko="TODO: 결론을 줄글로 시작 — 무엇을 검증하려 했고 데이터는 그것을 뒷받침했는가." data-en="TODO: open the conclusion in prose — what you set out to verify, and whether the data supported it.">TODO: 결론을 줄글로 시작 — 무엇을 검증하려 했고 데이터는 그것을 뒷받침했는가.</p>
+  <p class="i18n" data-ko="TODO: 결론을 의사결정으로 잇는 한 문단. 정직하게 — 답한 부분과 답하지 못한 부분을 모두. 후속(2차) 분석이 있으면 여기서 예고." data-en="TODO: one paragraph tying the conclusion to a decision. Honestly — both what was answered and what wasn't. Foreshadow a follow-up analysis if there is one.">TODO: 결론을 의사결정으로 잇는 한 문단. 정직하게 — 답한 부분과 답하지 못한 부분을 모두. 후속(2차) 분석이 있으면 여기서 예고.</p>
+</div>
+  <div class="midcol wide">
+    <div class="insights">
+      <div class="ins"><span class="n">1</span><div><h4 class="i18n" data-ko="TODO 인사이트" data-en="TODO insight">TODO 인사이트</h4><p class="i18n" data-ko="TODO: 결과에 근거한 한 줄 — 어떤 결정을 바꾸나." data-en="TODO: one line grounded in a result — what decision it changes.">TODO: 결과에 근거한 한 줄.</p></div></div>
+      <div class="ins"><span class="n">2</span><div><h4 class="i18n" data-ko="TODO 인사이트" data-en="TODO insight">TODO 인사이트</h4><p class="i18n" data-ko="TODO: 결과에 근거한 한 줄 — 어떤 결정을 바꾸나." data-en="TODO: one line grounded in a result — what decision it changes.">TODO: 결과에 근거한 한 줄.</p></div></div>
+      <div class="ins"><span class="n">3</span><div><h4 class="i18n" data-ko="TODO 인사이트" data-en="TODO insight">TODO 인사이트</h4><p class="i18n" data-ko="TODO: 결과에 근거한 한 줄 — 어떤 결정을 바꾸나." data-en="TODO: one line grounded in a result — what decision it changes.">TODO: 결과에 근거한 한 줄.</p></div></div>
+      <div class="ins"><span class="n">4</span><div><h4 class="i18n" data-ko="TODO 인사이트" data-en="TODO insight">TODO 인사이트</h4><p class="i18n" data-ko="TODO: 결과에 근거한 한 줄 — 어떤 결정을 바꾸나." data-en="TODO: one line grounded in a result — what decision it changes.">TODO: 결과에 근거한 한 줄.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 한계 — prose intro + "most important reframe" callout + cards ============ -->
+<section class="longform"><div class="essay">
+  <div class="kicker"><span class="no">09</span><span class="i18n" data-ko="한계" data-en="Limitations">한계</span><span class="ln"></span></div>
+  <h2 class="i18n" data-ko="TODO: 이 결론을 뒤집을 수 있는 것들" data-en="TODO: what could overturn this">TODO: 이 결론을 뒤집을 수 있는 것들</h2>
+  <p class="i18n" data-ko="TODO: 한계를 줄글로 정직하게 — 아래 중 하나라도 바뀌면 결론이 바뀐다. 단일 최대 약점이 무엇인지 지목." data-en="TODO: state the limitations honestly in prose — if any one of the below changes, so does the conclusion. Name the single biggest weakness.">TODO: 한계를 줄글로 정직하게 — 아래 중 하나라도 바뀌면 결론이 바뀐다. 단일 최대 약점이 무엇인지 지목.</p>
+</div>
+  <!-- keep this only if the analysis reframed the problem -->
+  <div class="midcol">
+    <div class="callout">
+      <h3 class="i18n" data-ko="가장 중요한 재프레임" data-en="The most important reframe">가장 중요한 재프레임</h3>
+      <p class="i18n" data-ko="TODO: 가장 큰 약점/재프레임을 뒷받침 숫자와 함께. 무엇을 바꾸면 결과가 실질적으로 달라질 수 있는지." data-en="TODO: the biggest weakness/reframe, backed by a number. What change could materially alter the result.">TODO: 가장 큰 약점/재프레임을 뒷받침 숫자와 함께.</p>
+    </div>
+  </div>
+  <div class="midcol wide">
+    <div class="insights">
+      <div class="ins"><span class="n">A</span><div><h4 class="i18n" data-ko="TODO 한계" data-en="TODO limitation">TODO 한계</h4><p class="i18n" data-ko="TODO: 한 줄 설명." data-en="TODO: one-line detail.">TODO: 한 줄 설명.</p></div></div>
+      <div class="ins"><span class="n">B</span><div><h4 class="i18n" data-ko="TODO 한계" data-en="TODO limitation">TODO 한계</h4><p class="i18n" data-ko="TODO: 한 줄 설명." data-en="TODO: one-line detail.">TODO: 한 줄 설명.</p></div></div>
+      <div class="ins"><span class="n">C</span><div><h4 class="i18n" data-ko="TODO 한계" data-en="TODO limitation">TODO 한계</h4><p class="i18n" data-ko="TODO: 한 줄 설명." data-en="TODO: one-line detail.">TODO: 한 줄 설명.</p></div></div>
+      <div class="ins"><span class="n">D</span><div><h4 class="i18n" data-ko="TODO 한계" data-en="TODO limitation">TODO 한계</h4><p class="i18n" data-ko="TODO: 한 줄 설명." data-en="TODO: one-line detail.">TODO: 한 줄 설명.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA — next step / sibling report (delete if none) ============ -->
+<section class="block" style="padding-top:18px"><div class="wrap">
+  <div class="card raised" style="text-align:center;background:var(--accent-soft);border-color:var(--accent-200)">
+    <span class="eyebrow i18n" style="justify-content:center" data-ko="다음 단계" data-en="Next step">다음 단계</span>
+    <h2 style="font-size:24px;margin:10px 0 6px" class="i18n" data-ko="TODO: 다음 분석의 한 줄" data-en="TODO: the next analysis in one line">TODO: 다음 분석의 한 줄</h2>
+    <p style="color:var(--ink-2);max-width:560px;margin:0 auto 18px" class="i18n" data-ko="TODO: 후속 분석이 무엇을 바로잡고 무엇을 드러낼지." data-en="TODO: what the follow-up fixes and what it reveals.">TODO: 후속 분석이 무엇을 바로잡고 무엇을 드러낼지.</p>
+    <!-- TODO: link to the sibling/next report -->
+    <a href="report2.html" style="display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:var(--r-pill);background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:600;font-size:15.5px;box-shadow:var(--shadow-accent)">
+      <span class="i18n" data-ko="TODO: 다음 분석 보기" data-en="TODO: see the next analysis">TODO: 다음 분석 보기</span> <i data-lucide="arrow-right"></i></a>
+  </div>
+</div></section>
+
+<!-- ============ 출처 · 참고 자료 ============ -->
+<section class="block" style="padding-top:0"><div class="wrap">
+  <div class="refbox">
+    <div class="ref-col">
+      <h4 class="ref-h i18n" data-ko="출처" data-en="Data sources">출처</h4>
+      <ul class="ref-list">
+        <li class="i18n" data-ko="TODO: 데이터 출처 1" data-en="TODO: data source 1">TODO: 데이터 출처 1</li>
+        <li class="i18n" data-ko="TODO: 데이터 출처 2" data-en="TODO: data source 2">TODO: 데이터 출처 2</li>
+        <li class="i18n" data-ko="TODO: 데이터 출처 3" data-en="TODO: data source 3">TODO: 데이터 출처 3</li>
+      </ul>
+    </div>
+    <div class="ref-col">
+      <h4 class="ref-h i18n" data-ko="참고 자료" data-en="Notes / method">참고 자료</h4>
+      <ul class="ref-list">
+        <li class="i18n" data-ko="<b>기간 · 표본</b> TODO" data-en="<b>Period · sample</b> TODO"><b>기간 · 표본</b> TODO</li>
+        <li class="i18n" data-ko="<b>방법</b> TODO" data-en="<b>Method</b> TODO"><b>방법</b> TODO</li>
+        <li class="i18n" data-ko="<b>성격</b> TODO (연관/인과)" data-en="<b>Nature</b> TODO (assoc./causal)"><b>성격</b> TODO (연관/인과)</li>
+        <li class="i18n" data-ko="<b>한계</b> TODO" data-en="<b>Limitations</b> TODO"><b>한계</b> TODO</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+</main>
+
+<!-- Unified portfolio footer (same as the portfolio site). Keep this line. -->
+<script src="https://sciencemj.github.io/embed/footer.js" defer></script>
+
+<!-- Theme toggle + language toggle (ko/en) + Lucide icons -->
+<script>
+  const root=document.documentElement;
+
+  /* theme */
+  const savedTheme=localStorage.getItem("ddr-theme");
+  if(savedTheme)root.setAttribute("data-theme",savedTheme);
+  function syncTheme(){
+    const dark=root.getAttribute("data-theme")==="dark";
+    document.getElementById("theme").innerHTML='<i data-lucide="'+(dark?"sun":"moon")+'"></i>';
+    if(window.lucide)lucide.createIcons();
+  }
+  document.getElementById("theme").addEventListener("click",()=>{
+    const next=root.getAttribute("data-theme")==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);localStorage.setItem("ddr-theme",next);syncTheme();
+  });
+
+  /* language (한국어 / English) — swaps innerHTML of every .i18n node */
+  const LANGS=["ko","en"];
+  function applyLang(lang){
+    if(!LANGS.includes(lang))lang="ko";
+    root.setAttribute("data-lang",lang);
+    root.setAttribute("lang",lang);
+    document.querySelectorAll(".i18n").forEach(el=>{
+      const text=el.getAttribute("data-"+lang);
+      if(text!==null)el.innerHTML=text;
+    });
+    document.querySelectorAll("[data-set-lang]").forEach(btn=>{
+      btn.classList.toggle("on",btn.getAttribute("data-set-lang")===lang);
+    });
+    if(window.lucide)lucide.createIcons();
+  }
+  document.querySelectorAll("[data-set-lang]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const lang=btn.getAttribute("data-set-lang");
+      localStorage.setItem("ddr-lang",lang);applyLang(lang);
+    });
+  });
+
+  applyLang(localStorage.getItem("ddr-lang")||"ko");
+  if(window.lucide)lucide.createIcons();
+  syncTheme();
+</script>
+</body>
+</html>
