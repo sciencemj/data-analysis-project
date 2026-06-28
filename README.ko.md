@@ -44,6 +44,7 @@ CRISP-DM 의 **정신에 충실**합니다: 비즈니스 이해와 평가가 핵
 
 ### 구성 요소
 - **스킬** `skills/data-analysis-project/` — `SKILL.md`(항상 로드되는 진입점) + `references/`(스테이지별 상세) + `assets/report-template.html` + `scripts/`
+- **개인화 스킬** `skills/report-personalization/` — 1회 설정 유틸: 너의 정체성 프리셋(포트폴리오 · 저자 · GitHub owner · footer)을 `~/.claude/data-analysis-report-preset.json` 에 기록 → 생성 리포트가 템플릿 저자 대신 *네* 정체성을 갖게 함. 첫 리포트 전 실행.
 - **서브에이전트** `agents/`
   - `data-source-scout` — Stage 3: 공개 데이터 탐색·접근 probe → 정제된 후보 shortlist 반환(메인 컨텍스트 보호)
   - `data-quality` — Stage 6: `data_quality.py` 리포트 해석 → 컬럼별 처리(impute/drop/cap/keep) 판단, leakage 플래그

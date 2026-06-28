@@ -8,5 +8,5 @@
   },
   "license": "MIT",
   "keywords": ["data-analysis", "eda", "notebook", "report", "data-essay", "korean", "bilingual", "workflow"],
-  "skills": ["./skills/data-analysis-project"]
+  "skills": ["./skills/data-analysis-project", "./skills/report-personalization"]
 }

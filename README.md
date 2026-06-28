@@ -44,6 +44,7 @@ It is faithful to CRISP-DM's **intent**: Business Understanding and Evaluation a
 
 ### Components
 - **Skill** `skills/data-analysis-project/` — `SKILL.md` (always-loaded entry point) + `references/` (per-stage detail) + `assets/report-template.html` + `scripts/`
+- **Personalization skill** `skills/report-personalization/` — a one-time setup utility: records your identity preset (portfolio · author · GitHub owner · footer) at `~/.claude/data-analysis-report-preset.json`, so generated reports carry *your* identity instead of the template author's. Run it before your first report.
 - **Subagents** `agents/`
   - `data-source-scout` — Stage 3: explores/probes open data and returns a distilled candidate shortlist (keeps search noise out of the main context)
   - `data-quality` — Stage 6: reads the `data_quality.py` report and recommends per-column treatment (impute/drop/cap/keep), flags leakage

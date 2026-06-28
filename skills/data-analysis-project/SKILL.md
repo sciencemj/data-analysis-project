@@ -185,6 +185,13 @@ covers **목표 · 과정 · 결과 · 보완할 점** as numbered chapters (질
 (`assets/report-template.html`); it is **bilingual (ko/en)** with a language + theme
 toggle. Title the report with the project's core question. Ground every number in the
 notebook output; never invent figures.
+
+**Personalize the report's identity.** Before filling the template's author slots (the nav
+back-link, the GitHub repo link, the footer), apply the running user's **personalization preset**
+(project `./report-preset.json`, else `~/.claude/data-analysis-report-preset.json`): use their
+portfolio URL (omit the back-link if none), GitHub owner, footer choice, and author name in place
+of the template's defaults. If no preset exists and you are **not** the template author, run the
+**`report-personalization`** skill first (or ask for these inline) — never ship someone else's identity.
 → **gate:** the report opens standalone and every asset resolves; the limitations section
 is present; i18n parity holds (`.i18n` == `data-ko` == `data-en`) with zero `TODO`; and
 the **visual-review gate passes** — `scripts/screenshot_report.py` renders 8 PNGs

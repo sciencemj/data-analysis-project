@@ -4,9 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-This is **not an application** — it is a Claude Code **plugin** that packages a single
-**skill** (`data-analysis-project`). The "product" is the prompt content itself: `SKILL.md`
-plus its bundled references, assets, and helper scripts. Editing this repo means editing the
+This is **not an application** — it is a Claude Code **plugin** that packages two **skills**:
+`data-analysis-project` (the gated workflow) and `report-personalization` (a small utility that
+records a per-user report-identity preset). The "product" is the prompt content itself: each
+`SKILL.md` plus the main skill's bundled references, assets, and helper scripts. Editing this repo means editing the
 instructions a future Claude instance reads when it runs a data-analysis project. Optimize for
 what the *reading* Claude will do, not for runtime behavior of a program.
 
@@ -20,8 +21,10 @@ Modeling → 5 + 7, Evaluation → 8, Deployment → 9). The README documents th
 .claude-plugin/plugin.json          # plugin manifest (name, version, skills path)
 .claude-plugin/marketplace.json     # marketplace entry — makes the plugin installable
 agents/                             # plugin subagents: data-source-scout, data-quality, analysis-critic
-skills/data-analysis-project/       # the skill payload — paths below are relative to here
+skills/data-analysis-project/       # main skill — paths in Architecture below are relative to here
   SKILL.md  references/  scripts/  assets/
+skills/report-personalization/      # 2nd skill — writes a per-user report-identity preset
+  SKILL.md
 evals/                              # dev-only: behavioral test cases + fixtures (not shipped)
 README.md / README.ko.md            # bilingual docs (EN default + ko language button), CRISP-DM framing
 LICENSE                             # MIT
@@ -61,7 +64,10 @@ The skill is built around context economy: load the minimum upfront, pull detail
   design system, **bilingual ko/en** (`.i18n` + `data-ko`/`data-en`, `applyLang` swaps
   `innerHTML`), theme + language toggles, essay primitives (`.essay`, `figure.figure`,
   `.midcol`, `.pull`, `.aside`, `.srccards`). `TODO` placeholders the user-facing run fills
-  in. Carries a `← 포트폴리오` back-link and an `embed/footer.js` `<script>` that must survive copies.
+  in. Carries the **template author's** `← 포트폴리오` back-link, GitHub owner, and `embed/footer.js`
+  `<script>` as defaults; the data-analysis **Stage 9** step swaps in the *running user's* identity
+  from a personalization preset (set via the `report-personalization` skill, stored at
+  `~/.claude/data-analysis-report-preset.json`), or keeps the author's defaults if there is none.
 - **`scripts/data_quality.py`** — the Stage 4 profiler (report mode) and the Stage 6
   data-prep gate (`--strict`): per-column null-rate, outliers (IQR + robust-z), duplicates,
   constant/all-null columns; exits nonzero on violation.
