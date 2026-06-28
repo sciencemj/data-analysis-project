@@ -76,9 +76,10 @@ accents inserted between prose blocks — never the main content.** Avoid the
 "dashboard of cards with one-line captions" look. The essay still covers 목표 · 과정 ·
 결과 · 보완할 점, but as a narrative, not a grid of tiles.
 
-Start from `assets/report-template.html` — the Sciencemj design-system template (warm
-earth-tone tokens, light+dark, Space Grotesk/Hanken/JetBrains Mono, theme + language
-toggle). Copy it to the project as `report.html` and fill it in.
+Start from `assets/report-template.html` — a neutral-default design-system template (warm
+earth-tone tokens, light+dark, Space Grotesk/Hanken/JetBrains Mono, theme + language toggle;
+restyle via the CSS variables). Copy it to the project as `report.html`, fill it in, and
+**personalize the back-link / repo / footer to the running user — or remove them**.
 
 ### Title & structure
 - **Title = the project's core question** (e.g. "범죄 적은 동네가 더 비쌀까?"). A strong
@@ -130,9 +131,10 @@ figures, cards and the title line up on the same left/right edge as the reader s
   `data-en`; the visible text = the `data-ko` version. The `applyLang()` script swaps
   `innerHTML`. Verify parity: count of `.i18n` == count of `data-ko` == count of `data-en`,
   and **zero `TODO`** remaining.
-- **Keep the theme toggle** (`ddr-theme`), the **language toggle** (`ddr-lang`), and the
-  **`embed/footer.js` `<script>`** intact. Keep the `← 포트폴리오 / Portfolio` back-link and
-  set the `TODO-repo` link to this project's repo.
+- **Keep the theme toggle** (`ddr-theme`) and the **language toggle** (`ddr-lang`). **Personalize
+  the identity:** set the portfolio back-link, the repo link, and the footer to the *running
+  user's* — or remove them. **Never ship the template author's URLs / shared footer**; the bundled
+  default footer is self-contained.
 - **Ground every number in the actual notebook/analysis output — never invent figures.**
   Caption each figure with what it *shows*.
 - **Self-contained.** Opens standalone; every `report_assets/*` path resolves. Put figures

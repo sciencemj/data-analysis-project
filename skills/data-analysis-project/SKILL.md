@@ -204,12 +204,13 @@ Read these when you reach the relevant stage — don't load everything upfront.
 - `references/notebook-and-report.md` — the cell-per-action discipline, executing a
   notebook with `nbclient` to verify + embed outputs, palette-matched matplotlib,
   and assembling the HTML report.
-- `assets/report-template.html` — the Sciencemj **prose-essay** report template:
+- `assets/report-template.html` — a **prose-essay** report template (neutral default theme):
   design-system tokens, light/dark, **bilingual ko/en** (`.i18n` + `data-ko`/`data-en`,
-  `applyLang`), theme + language toggle, `← 포트폴리오` back-link + shared `footer.js`, and
-  the essay layout primitives (`.essay`, `figure.figure`, `.midcol`, `.pull`, `.aside`,
-  `.srccards`). Copy to `report.html`, replace every `TODO` (fill both languages), keep the
-  footer + toggles, delete unused chapters.
+  `applyLang`), theme + language toggle, a self-contained footer, an optional portfolio
+  back-link, and the essay layout primitives (`.essay`, `figure.figure`, `.midcol`, `.pull`,
+  `.aside`, `.srccards`). Copy to `report.html`, replace every `TODO` (fill both languages),
+  **personalize the back-link / repo / footer to the running user — or remove them; never ship
+  another author's identity**; keep the toggles; delete unused chapters.
 - `scripts/data_quality.py` — strict profiler + gate: per-column null-rate, outliers
   (IQR + robust-z), duplicates, constant/all-null columns. Report mode feeds the Stage 4
   profile; `--strict` is the Stage 6 data-prep gate (exits nonzero on violation).

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  Sciencemj — data-essay report template (prose-driven, blog × paper hybrid)
+  Data-essay report template (prose-driven, blog × paper hybrid) — neutral default theme
   =========================================================================
   Reads like a long-form data essay: flowing prose (줄글) is the backbone that
   carries the argument; cards, figures, graphs, pull-quotes and callouts are
@@ -21,9 +21,14 @@
 
   Hard requirements (do not remove)
     • Bilingual: every translatable node is class="i18n" with data-ko + data-en.
-    • Keep the theme toggle (ddr-theme), the language toggle (ddr-lang), and the
-      footer.js <script> include intact.
-    • Keep the "← 포트폴리오 / Portfolio" back-link; set TODO-repo to this project.
+    • Keep the theme toggle (ddr-theme) and the language toggle (ddr-lang).
+
+  Personalize before shipping — do NOT ship the template author's identity
+    • Back-link (nav): set href to YOUR portfolio, or delete the link if you have none.
+    • Repo link (nav): set to THIS project's GitHub repo, or delete it.
+    • Footer: a minimal self-contained footer is the default — set author/year/repo, or
+      swap in your own shared embed (an optional author preset is commented near </main>).
+    • Design tokens below are a NEUTRAL default theme — restyle freely via the CSS variables.
 
   Layout primitives (CSS below)
     All flow blocks share one content width (max-width:1080px) so prose, figures,
@@ -46,7 +51,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
-/* ===== Design tokens — Sciencemj (warm earth-tone, terracotta) ===== */
+/* ===== Design tokens — neutral default theme (warm earth-tone, terracotta) · restyle via these vars ===== */
 :root{
   --accent-50:#FDF1E8;--accent-100:#FBDFC8;--accent-200:#F6BE91;--accent-300:#F19C5C;
   --accent-400:#ED7E33;--accent:#E8682B;--accent-600:#CE551E;--accent-700:#A84417;--accent-soft:#FBEEE2;
@@ -216,9 +221,10 @@ figure.figure figcaption b{color:var(--ink);font-weight:600}
     <!-- TODO: project short name -->
     <div class="brand"><span class="mk"><i data-lucide="bar-chart-3"></i></span><span><span class="i18n" data-ko="TODO 짧은 제목" data-en="TODO short title">TODO 짧은 제목</span><span class="dot">.</span></span></div>
     <div class="nav-right">
-      <a href="https://sciencemj.github.io/" class="badge" aria-label="포트폴리오 / Portfolio"><span class="i18n" data-ko="← 포트폴리오" data-en="← Portfolio">← 포트폴리오</span></a>
-      <!-- TODO: link to THIS project's GitHub repo -->
-      <a href="https://github.com/sciencemj/TODO-repo" class="icon-btn" target="_blank" rel="noopener" aria-label="GitHub 소스 / View source"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a>
+      <!-- TODO: your portfolio URL — or delete this whole back-link if you have none -->
+      <a href="TODO-portfolio-url" class="badge" aria-label="포트폴리오 / Portfolio"><span class="i18n" data-ko="← 포트폴리오" data-en="← Portfolio">← 포트폴리오</span></a>
+      <!-- TODO: link to THIS project's GitHub repo (set owner + repo) -->
+      <a href="https://github.com/TODO-owner/TODO-repo" class="icon-btn" target="_blank" rel="noopener" aria-label="GitHub 소스 / View source"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a>
       <div class="lang-toggle" role="group" aria-label="Language / 언어">
         <button type="button" data-set-lang="ko">한국어</button>
         <button type="button" data-set-lang="en">EN</button>
@@ -465,8 +471,14 @@ figure.figure figcaption b{color:var(--ink);font-weight:600}
 
 </main>
 
-<!-- Unified portfolio footer (same as the portfolio site). Keep this line. -->
-<script src="https://sciencemj.github.io/embed/footer.js" defer></script>
+<!-- Footer — minimal & self-contained (default). Set author / year / repo, or swap in your own embed. -->
+<footer class="wrap" style="padding:48px 0;margin-top:40px;border-top:1px solid var(--line,#e5e5e5);color:var(--mut,#888);font-size:14px">
+  <span class="i18n" data-ko="TODO 저자 · 2026 · 데이터 에세이" data-en="TODO author · 2026 · data essay">TODO 저자 · 2026 · 데이터 에세이</span>
+</footer>
+<!-- Author preset (optional) — to use a shared site footer instead of the one above, uncomment and set src:
+<script src="https://YOUR-SITE/embed/footer.js" defer></script>
+(template author's own: https://sciencemj.github.io/embed/footer.js) -->
+
 
 <!-- Theme toggle + language toggle (ko/en) + Lucide icons -->
 <script>
