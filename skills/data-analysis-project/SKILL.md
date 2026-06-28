@@ -97,7 +97,10 @@ with the user until you have: a specific question, the **decision** it informs, 
 Confirm relevant open/available data exists, then **investigate how to actually
 access it** — exact API service names, endpoints, auth/keys, file formats, encoding,
 schema, update cadence, and the **usage license / terms** (does it permit the intended use +
-redistribution). Probe the live source to confirm before relying on it.
+redistribution). Probe the live source to confirm before relying on it. When you pull the data,
+acquire it **in bulk** (bulk download / largest page size / server-side filters), **not
+record-by-record** — a slow per-record (N+1) loop is a last resort, only when the source offers no
+other access.
 → **gate:** you have fetched a real sample and know the schema, keys, access method, and that
 the license permits the intended use. See `references/data-sourcing.md`.
 

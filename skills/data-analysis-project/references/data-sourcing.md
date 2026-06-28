@@ -29,6 +29,19 @@ Write a tiny script that fetches a real sample and prints the schema. Confirm:
   between periods. Prefer a contiguous span with a consistent schema; harmonize the rest
   by position, and **log what you excluded** rather than silently dropping it.
 
+## Pull efficiently — bulk, not row-by-row
+
+Get many records per request; don't fetch one record at a time.
+
+- **Prefer, in order:** a bulk file / dump / full CSV download → a batch or paged API at the
+  **largest page size** allowed → server-side **filters** (date range, region, category) so you
+  pull only the rows you need. One query that returns thousands of rows beats thousands of queries.
+- **Avoid the N+1 loop:** one HTTP request per record (fetching each id / day / station separately)
+  is slow, hammers the source, and trips rate limits — it can turn minutes into hours.
+- **Last resort is OK.** If the source genuinely exposes no bulk / batch / paged / filtered access,
+  a per-record loop is acceptable — but then add a polite delay / backoff between calls, **cache
+  every response** so you never re-pull, and fetch **only the subset you actually need**.
+
 ## API access patterns
 
 - **Keys via `.env`.** Never hardcode. `from dotenv import load_dotenv; load_dotenv()`,
