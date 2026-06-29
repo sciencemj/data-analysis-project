@@ -152,5 +152,23 @@ longer than KO) doesn't break layout, both themes legible. **Fix → re-screensh
 until it passes.**
 (Requires Playwright: `uv add --dev playwright && uv run playwright install chromium`.)
 
-If publishing to GitHub, enable Pages (Settings → Pages → branch `main`, `/`) so the HTML
-renders online — GitHub shows raw source otherwise — and link it from the README.
+## Publish to GitHub Pages (optional)
+
+The report is a single self-contained HTML file, so GitHub Pages can serve it directly. Publishing
+is **outward-facing — confirm with the user first** (it makes the repo's content public).
+
+1. **Commit the report + assets.** `report.html` and everything under `report_assets/` must be in
+   the repo — a raw `.html` opened on github.com shows source, not the rendered page.
+2. **Enable Pages** — branch `main`, folder `/` (root) or `/docs`:
+   ```bash
+   # via gh CLI (POST to create; if already enabled, use -X PUT)
+   gh api -X POST repos/<owner>/<repo>/pages -f "source[branch]=main" -f "source[path]=/"
+   ```
+   Or in the UI: Settings → Pages → Source = "Deploy from a branch" → `main` / `/`.
+3. **Get the URL + verify.** The report is at `https://<owner>.github.io/<repo>/report.html`
+   (under `/docs` if you chose that). Pages takes ~1 min to build:
+   ```bash
+   gh api repos/<owner>/<repo>/pages -q .html_url   # base URL; append report.html
+   ```
+   Open it and confirm it renders (not raw source) and that every `report_assets/*` resolves.
+4. **Link it** from the README, and from the personalization preset's portfolio if set.

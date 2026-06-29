@@ -97,10 +97,7 @@ with the user until you have: a specific question, the **decision** it informs, 
 Confirm relevant open/available data exists, then **investigate how to actually
 access it** — exact API service names, endpoints, auth/keys, file formats, encoding,
 schema, update cadence, and the **usage license / terms** (does it permit the intended use +
-redistribution). Probe the live source to confirm before relying on it. When you pull the data,
-acquire it **in bulk** (bulk download / largest page size / server-side filters), **not
-record-by-record** — a slow per-record (N+1) loop is a last resort, only when the source offers no
-other access.
+redistribution). Probe the live source to confirm before relying on it.
 → **gate:** you have fetched a real sample and know the schema, keys, access method, and that
 the license permits the intended use. See `references/data-sourcing.md`.
 
@@ -201,12 +198,6 @@ the **visual-review gate passes** — `scripts/screenshot_report.py` renders 8 P
 (desktop/mobile × light/dark × ko/en) and you confirmed no overlap, content blocks aligned
 to one left/right edge, mobile single-column, and EN not breaking layout. See
 `references/notebook-and-report.md`.
-
-**Publish (optional, with the user's go-ahead).** Publishing is outward-facing — confirm first.
-Commit `report.html` + `report_assets/`, enable **GitHub Pages** on the repo (branch `main`, `/`),
-and share the live URL (`https://<owner>.github.io/<repo>/report.html`) — Pages renders the HTML,
-while a raw `.html` on github.com shows only source. Verify it loads and assets resolve, then link
-it from the README / portfolio. See `references/notebook-and-report.md`.
 
 ## Bundled resources
 
