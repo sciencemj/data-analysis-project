@@ -205,8 +205,9 @@ to one left/right edge, mobile single-column, and EN not breaking layout. See
 **Publish (optional, with the user's go-ahead).** Publishing is outward-facing — confirm first.
 Commit `report.html` + `report_assets/`, enable **GitHub Pages** on the repo (branch `main`, `/`),
 and share the live URL (`https://<owner>.github.io/<repo>/report.html`) — Pages renders the HTML,
-while a raw `.html` on github.com shows only source. Verify it loads and assets resolve, then link
-it from the README / portfolio. See `references/notebook-and-report.md`.
+while a raw `.html` on github.com shows only source. Verify it loads and assets resolve, link it
+from the README / portfolio, and **add repo topics** (`gh repo edit --add-topic`) so the published
+project is discoverable. See `references/notebook-and-report.md`.
 
 ## Bundled resources
 

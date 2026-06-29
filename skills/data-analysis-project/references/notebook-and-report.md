@@ -172,3 +172,10 @@ is **outward-facing — confirm with the user first** (it makes the repo's conte
    ```
    Open it and confirm it renders (not raw source) and that every `report_assets/*` resolves.
 4. **Link it** from the README, and from the personalization preset's portfolio if set.
+5. **Add repo topics** with the `gh` CLI so the published project is discoverable:
+   ```bash
+   gh repo edit <owner>/<repo> --add-topic data-analysis --add-topic data-essay --add-topic <domain>
+   ```
+   Use a few relevant topics — `data-analysis`, `eda`, `data-essay`, plus the project's domain
+   (e.g. `seoul-bike`, `cafe-sales`) and `korean` if the report is bilingual. Topics are
+   outward-facing (public repo metadata) — confirm with the user first.
