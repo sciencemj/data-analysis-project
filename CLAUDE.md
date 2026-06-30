@@ -106,9 +106,10 @@ python skills/data-analysis-project/scripts/data_quality.py path/to/data.csv    
 python skills/data-analysis-project/scripts/data_quality.py path/to/prepared.csv --strict     # gate (exit≠0 on violation)
 uv add pandas numpy                                    # deps
 
-# Stage-7 gate: run a notebook end-to-end, write outputs back, report errors + multi-output cells
-python skills/data-analysis-project/scripts/execute_notebook.py path/to/analysis.ipynb [--timeout 900]
-uv add --dev nbclient nbformat ipykernel              # deps
+# Stage-7: author notebooks/analysis.py (jupytext percent) → generate → run end-to-end, embed outputs
+jupytext --to notebook notebooks/analysis.py
+python skills/data-analysis-project/scripts/execute_notebook.py notebooks/analysis.ipynb [--timeout 900]
+uv add --dev jupytext nbclient nbformat ipykernel     # deps
 
 # Stage-9 visual gate: render report to 8 PNGs (desktop/mobile × light/dark × ko/en)
 python skills/data-analysis-project/scripts/screenshot_report.py path/to/report.html [--out DIR]

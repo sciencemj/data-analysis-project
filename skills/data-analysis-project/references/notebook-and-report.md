@@ -4,6 +4,18 @@ Covers Stage 7 (notebook) and Stage 9 (report).
 
 ## Stage 7 — the notebook
 
+**Author it as a jupytext `.py` source.** Write `notebooks/analysis.py` in **percent format** — a
+`# %%` line starts a code cell, `# %% [markdown]` a markdown cell — then generate and run:
+
+```bash
+jupytext --to notebook notebooks/analysis.py                  # → notebooks/analysis.ipynb
+python scripts/execute_notebook.py notebooks/analysis.ipynb   # run + embed outputs
+```
+
+The `.py` is the **editable source** (diff-friendly, easy to revise); the `.ipynb` is the
+generated, executed artifact. Loop: edit `.py` → regenerate → re-execute. **Commit both.**
+(Requires `uv add --dev jupytext`.)
+
 The discipline that makes a notebook readable and trustworthy:
 
 - **One cell = one action.** Setup, fetch, clean, join, each chart, each model — its own
@@ -51,7 +63,7 @@ Writing cells isn't proof they run in sequence. Execute the notebook end-to-end 
 confirm zero errors + embedded outputs. Use the bundled script:
 
 ```bash
-python scripts/execute_notebook.py path/to/analysis.ipynb
+python scripts/execute_notebook.py notebooks/analysis.ipynb
 ```
 
 It runs every cell with `nbclient` (live network/keys available, cwd = project root),

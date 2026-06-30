@@ -53,7 +53,9 @@ needs it (scaffold `data/` + `scripts/` + `.env` at Stage 3; the rest appear at 
 ├── .env                    # API keys, gitignored — Stage 3
 ├── scripts/preprocess.py   # heavy download + aggregation (keeps the notebook light) — Stage 3
 ├── data/processed/         # compact aggregates + the Stage-6 validated table (committed); notebook reads here
-├── analysis.ipynb          # the notebook — Stage 7
+├── notebooks/
+│   ├── analysis.py         # jupytext percent source — EDIT THIS — Stage 7
+│   └── analysis.ipynb      # generated + executed (jupytext → nbclient) — Stage 7
 ├── report.html             # the report, copied from the template — Stage 9
 ├── report_assets/          # figures referenced by report.html — Stage 9
 └── _review/                # 8 screenshot PNGs from the visual gate (transient) — Stage 9
@@ -162,10 +164,12 @@ row-counts / cardinality verified (no silent fan-out); no target/future leakage;
 transformation logged. See `references/stage-playbook.md`.
 
 ### 7. 코드 작성 · Build the notebook
-Build a Jupyter notebook where **one cell = one action**, each cell emits **at most
-one kind of output**, and you **test each cell as you write it**. Between cells, add
-short **markdown commentary interpreting the result you just saw**. Execute the whole
-notebook at the end to confirm it runs clean and to embed outputs.
+Author the notebook as a **jupytext percent source** `notebooks/analysis.py` — a `# %%` code cell
+= **one action** emitting **at most one kind of output**, with `# %% [markdown]` cells between that
+**interpret the result you just saw**; test each cell as you write it. Then **generate and execute**:
+`jupytext --to notebook notebooks/analysis.py` → `notebooks/analysis.ipynb`, then
+`scripts/execute_notebook.py` to run clean and embed outputs. The `.py` is the editable source; the
+`.ipynb` is the generated, executed artifact — commit both.
 
 **If the project fits a predictive model** (forecast / classification / regression that
 **predicts a value**, scored against a target metric — *not* regression used only to estimate an
