@@ -4,6 +4,10 @@ Stage 3. Two jobs: confirm relevant data exists, and nail down the *real* access
 mechanism by probing the live source. Most lost time here comes from assuming schemas,
 encodings, and endpoint names instead of checking.
 
+**Scaffold once, before pulling:** create `data/processed/` (committed aggregates + the Stage-6
+table) and `scripts/` (for `preprocess.py`), and keep API keys in a **gitignored `.env`**. Raw
+downloads are transient — aggregate them into `data/processed/` and delete the bulky raw.
+
 ## Find candidate data
 
 - Search open-data portals and the web for datasets matching the goal's entities and

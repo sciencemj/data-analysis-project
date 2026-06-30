@@ -45,6 +45,24 @@ below) in your environment's task/todo list. Mark a stage **in-progress** when y
 glance (확인) and the run keeps a record of what's done (기록). Add a todo for any Stage-8
 loop-back or reframe so the detour stays visible.
 
+**Project layout.** Build this structure in the user's project — create each part when its stage
+needs it (scaffold `data/` + `scripts/` + `.env` at Stage 3; the rest appear at their stage):
+
+```
+<project>/
+├── .env                    # API keys, gitignored — Stage 3
+├── scripts/preprocess.py   # heavy download + aggregation (keeps the notebook light) — Stage 3
+├── data/processed/         # compact aggregates + the Stage-6 validated table (committed); notebook reads here
+├── analysis.ipynb          # the notebook — Stage 7
+├── report.html             # the report, copied from the template — Stage 9
+├── report_assets/          # figures referenced by report.html — Stage 9
+└── _review/                # 8 screenshot PNGs from the visual gate (transient) — Stage 9
+```
+
+Keep raw downloads out of the repo (aggregate → `data/processed/`, delete bulky raw). The
+personalization preset lives at `~/.claude/data-analysis-report-preset.json` (or a project
+`./report-preset.json`).
+
 ### 1. 문제 제기 · Frame & qualify the problem (loop with the user)
 Turn the hunch into a problem statement, then run it through a **qualification loop**
 *before any data work*. The problem must clear three tests; if it fails any, ask the
@@ -94,7 +112,8 @@ with the user until you have: a specific question, the **decision** it informs, 
 정량 목표), and the user has confirmed it. Do not start touching data before this.
 
 ### 3. 데이터 선정 · Source the data
-Confirm relevant open/available data exists, then **investigate how to actually
+**Scaffold the project first** (data work starts here): create `data/processed/` and `scripts/`,
+and put any secrets in a **gitignored `.env`**. Then confirm relevant open/available data exists, then **investigate how to actually
 access it** — exact API service names, endpoints, auth/keys, file formats, encoding,
 schema, update cadence, and the **usage license / terms** (does it permit the intended use +
 redistribution). Probe the live source to confirm before relying on it. When you pull the data,

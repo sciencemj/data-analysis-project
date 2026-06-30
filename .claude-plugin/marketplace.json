@@ -9,7 +9,7 @@
       "name": "data-analysis-project",
       "source": "./",
       "description": "End-to-end gated data-analysis workflow — frame a real problem, set a measurable goal, source real data, build a verified notebook, ship a bilingual (ko/en) prose-driven HTML data essay.",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": {
         "name": "sciencemj",
         "email": "sciencemj.park@gmail.com"
